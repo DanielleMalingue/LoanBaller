@@ -5,50 +5,55 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwipe : MonoBehaviour
 {
-    private Vector2 fingerDownPosition;
-    private Vector2 fingerUpPosition;
+    public float minSwipeDistance = 100f;
+    public int nextSceneIndex;
 
-    [SerializeField]
-    private float minDistanceForSwipe = 20f;
+    private Vector2 touchStartPosition;
 
     void Update()
     {
-        foreach (Touch touch in Input.touches)
+        // Check for touch input
+        if (Input.touchCount > 0)
         {
+            Touch touch = Input.GetTouch(0);
+
+            // Check for the beginning of the touch
             if (touch.phase == TouchPhase.Began)
             {
-                fingerDownPosition = touch.position;
-                fingerUpPosition = touch.position;
+                // Store the touch start position
+                touchStartPosition = touch.position;
             }
-
-            if (touch.phase == TouchPhase.Ended)
+            // Check for the end of the touch
+            else if (touch.phase == TouchPhase.Ended)
             {
-                fingerUpPosition = touch.position;
-                CheckSwipe();
+                // Calculate the swipe distance
+                float swipeDistance = touch.position.y - touchStartPosition.y;
+
+                // Check if the swipe distance is greater than the minimum required distance
+                if (Mathf.Abs(swipeDistance) >= minSwipeDistance)
+                {
+                    // Check if the swipe direction is downwards
+                    if (swipeDistance < 0)
+                    {
+                        // Change scene to the next scene index
+                        ChangeScene();
+                    }
+                }
             }
         }
     }
 
-    void CheckSwipe()
+    void ChangeScene()
     {
-        if (Vector2.Distance(fingerDownPosition, fingerUpPosition) > minDistanceForSwipe)
+        // Check if the next scene index is valid
+        if (nextSceneIndex >= 0 && nextSceneIndex < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings)
         {
-            float deltaX = fingerDownPosition.x - fingerUpPosition.x;
-            float deltaY = fingerDownPosition.y - fingerUpPosition.y;
-
-            if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
-            {
-                if (deltaX > 0)
-                {
-                    // Left swipe
-                    SceneManager.LoadScene("NextScene"); // Replace "NextScene" with the name of your scene
-                }
-                else
-                {
-                    // Right swipe
-                    SceneManager.LoadScene("PreviousScene"); // Replace "PreviousScene" with the name of your scene
-                }
-            }
+            // Load the next scene
+            UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            Debug.LogWarning("Invalid scene index!");
         }
     }
 }
