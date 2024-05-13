@@ -14,5 +14,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/SceneS/house.unity
     guid: f00711b28b981514296125953f5884ab
+  - enabled: 1
+    path: Assets/SceneS/Game.unity
+    guid: a75362e0800bee447b63a7f85d316bed
+  - enabled: 1
+    path: Assets/SceneS/Invest.unity
+    guid: 76ac57a98e2e3b7488d2b1af67b9929f
+  - enabled: 1
+    path: Assets/SceneS/Win.unity
+    guid: 5b684e834a98d7748a05696e04476ac2
   m_configObjects:
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: fd39bbfc7723fae468924da6ce96e051, type: 2}
